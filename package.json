@@ -1,0 +1,21 @@
+{
+    "name": "object-mapper",
+    "version": "1.0.0",
+    "description": "Object mapper",
+    "author": {
+        "name": "Lucas Marrane Siler",
+        "email": "lucasmarrane@gmail.com"
+    },
+    "main": "build/index.js",
+    "scripts": {
+        "build": "tsc",
+        "run-ts": "npx ts-node src/index.ts"
+    },
+    "keywords": [
+        "object2object",
+        "mapper",
+        "ts",
+        "object-mapper"
+    ],
+    "license": "MIT"
+}
