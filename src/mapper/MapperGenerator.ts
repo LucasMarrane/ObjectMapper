@@ -1,4 +1,11 @@
-type TypeItemMember = [string, string | Function];
+type ItemMemberType = [string, string | Function];
+
+type ConfigObject<T> = {
+    keyFrom?: keyof T;
+    keyTo?: string;
+    callback?: Function;
+};
+export type MapperConfigType<T> = Record<string, keyof T | ConfigObject<T>>;
 
 export class MapperGenerator {
     /**
@@ -8,22 +15,35 @@ export class MapperGenerator {
      * @param TSource - generic type of origin object
      * @param TDestination - generic type of destination object
      */
-    static createDinamycMap<
+    static createDynamicMap<
         TSource extends object,
         TDestination extends object
     >() {
-        return new DinamycMapper<TSource, TDestination>();
+        return new DynamicMapper<TSource, TDestination>();
     }
-
+    /**
+     * Create a mapper object.
+     *
+     *
+     * @param TSource - generic type of origin object
+     * @param TDestination - generic type of destination object
+     */
     static createStaticMap<TSource extends object, TDestination extends object>(
         objectFrom: TSource,
         objectTo?: TDestination
     ) {
         return new StaticMapper<TSource, TDestination>(objectFrom, objectTo);
     }
+
+    static createMapByConfig<TSource extends object>(
+        objectFrom: TSource,
+        config: MapperConfigType<TSource>
+    ) {
+        return new MapByConfig<TSource>(objectFrom, config).objectMapped;
+    }
 }
 
-class DinamycMapper<TSource extends object, TDestination extends object>  {
+class DynamicMapper<TSource extends object, TDestination extends object> {
     private _members = new MapperMember<TDestination>();
 
     /**
@@ -57,7 +77,7 @@ class DinamycMapper<TSource extends object, TDestination extends object>  {
             ) => any
         ][]
     ) {
-        this._members.addMember(fields as unknown as TypeItemMember);
+        this._members.addMember(fields as unknown as ItemMemberType);
         return this;
     }
 
@@ -169,13 +189,55 @@ class StaticMapper<TSource extends object, TDestination extends object> {
     }
 }
 
+class MapByConfig<TSource extends object> {
+    private _objectFrom: TSource;
+    private _objectTo: any;
+
+    private _config: MapperConfigType<TSource>;
+
+    constructor(objectFrom: TSource, config: MapperConfigType<TSource>) {
+        this._config = config;
+        this._objectFrom = objectFrom;
+        this._objectTo = {} as any;
+    }
+
+    private map() {
+        const newObject = { ...this._objectTo };
+
+        Object.entries(this._config).forEach(([key, value]) => {
+            if (key.includes('.')) {
+                this._objectTo= {...this._objectTo,...this.transformKeys(key, value)}               
+            } else {
+            }
+        });
+        console.log(JSON.stringify(this._objectTo))
+
+        this._config = { ...newObject };
+    }
+
+    private transformKeys(keys: string, value: any, object: any = {}) {
+        var tempObject = {} as any;
+        var container = tempObject;
+        keys.split('.').map((k, i, values) => {
+           container = (container[k] = (i == values.length - 1 ? value : {}))
+        });
+
+        return tempObject
+    }
+
+    get objectMapped() {
+        this.map();
+        return { ...this._objectTo };
+    }
+}
+
 class MapperMember<TDestination extends object> {
-    private _listMembers: TypeItemMember[] = new Array();
-    public addMember(member: TypeItemMember) {
+    private _listMembers: ItemMemberType[] = new Array();
+    public addMember(member: ItemMemberType) {
         this.removeMember(<keyof TDestination>member[0]);
         this._listMembers.push(member);
     }
-    public addMembers(members: TypeItemMember[]) {
+    public addMembers(members: ItemMemberType[]) {
         this.removeMembers(
             <(keyof TDestination)[]>members.map((member) => member[0])
         );

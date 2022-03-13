@@ -10,11 +10,15 @@
         "type": "git",
         "url": "https://github.com/LucasMarrane/ObjectMapper.git"
     },
-    "main": "build/index.js",
+    "main": "./build/index.js",    
+    "types": "./build/index.d.ts",    
+    "exports":{
+        "require": "./build/index.js" 
+    },
     "scripts": {
         "build": "tsc",
         "run-ts": "npx ts-node src/index.ts",
-        "run-js": "node build/index.js"
+        "run-js": "node build/index.js"        
     },
     "keywords": [
         "object2object",

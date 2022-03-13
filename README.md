@@ -48,7 +48,7 @@ const user: IUser = {
 ...
 
 
-const object = MapperGenerator.createDinamycMap<IUser, IData>()
+const object = MapperGenerator.createDynamicMap<IUser, IData>()
     .forField('fullname', (from) => `${from?.name} ${from?.surname}`)
     .forField('isUnderEigthteen', (from) => <number>from?.age < 18)
     .map(user);
