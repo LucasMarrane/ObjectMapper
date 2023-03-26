@@ -1,7 +1,3 @@
-import { MapperConfigType, MapperGenerator } from "./mapper/MapperGenerator";
+export * from "./mapper";
+export * from "./object";
 
-const config: MapperConfigType<{nome: string}> = { 
-    'Alaude.alo.descricao.chu': {callback: ()=> 'xablau1'}
-}
-
-MapperGenerator.createMapByConfig({nome: "xablau"},config)

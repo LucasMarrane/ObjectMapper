@@ -1,6 +1,6 @@
 {
     "name": "mapper-utils",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Object mapper",
     "author": {
         "name": "Lucas Marrane Siler",
@@ -10,15 +10,15 @@
         "type": "git",
         "url": "https://github.com/LucasMarrane/ObjectMapper.git"
     },
-    "main": "./build/index.js",    
-    "types": "./build/index.d.ts",    
-    "exports":{
-        "require": "./build/index.js" 
+    "main": "./build/index.js",
+    "types": "./build/index.d.ts",
+    "exports": {
+        "require": "./build/index.js"
     },
     "scripts": {
         "build": "tsc",
         "run-ts": "npx ts-node src/index.ts",
-        "run-js": "node build/index.js"        
+        "run-js": "node build/index.js"
     },
     "keywords": [
         "object2object",
@@ -27,5 +27,8 @@
         "object-mapper",
         "mapper-utils"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "^17.0.45"
+    }
 }
